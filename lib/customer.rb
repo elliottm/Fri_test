@@ -1,3 +1,5 @@
+require_relative 'exceptions'
+
 class Customer
 
 	def initialize
@@ -20,8 +22,8 @@ class Customer
 	end
 
 	def has_valid_order?
-      return false if @address == nil
-      return false if @phone == nil
+      raise NoAddressError if @address.nil?
+      raise NoPhoneError if @phone.nil?
       true
 	end
 

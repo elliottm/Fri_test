@@ -31,11 +31,13 @@ let(:customer) { Customer.new }
   end
 
   it 'has an invalid order' do
-    expect(customer).not_to have_valid_order
+    takeaway = double :takeaway
+    expect(lambda {customer.add_order_to(takeaway)} ).to raise_error(NoAddressError)
   end
 
   it 'has a valid order' do
     #how to refactor below command?
+    #which will include other environment setting commands as well..
     customer.assign_address 'address'
     customer.assign_number 'number'
     customer.add_dish_to_order :dish
@@ -56,6 +58,8 @@ let(:customer) { Customer.new }
 
   it 'places order with the takeaway' do
     #intereaction test below..
+    customer.assign_address 'address'
+    customer.assign_number 'number'
     takeaway = double :takeaway
     expect(takeaway).to receive(:add_new_order)
     customer.add_order_to takeaway
@@ -63,6 +67,8 @@ let(:customer) { Customer.new }
 
   it 'has an order after placing' do
     #outcome test of above intereaction..
+    customer.assign_address 'address'
+    customer.assign_number 'number'
     takeaway = double :takeaway, {:add_new_order => :true}
     customer.add_order_to takeaway
     expect(customer).to have_submitted_order
